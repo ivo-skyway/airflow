@@ -6,9 +6,9 @@ from airflow.operators.python import PythonOperator
 
 now = datetime.now()
 cron = '0 * * * *'  # execute every hour at :00
-cron = '*/5 * * * *'  # execute every 5th minute
+cron = '*/59 * * * *'  # execute every 5th minute
 start = now
-version = "0.1.25.2"
+version = "0.1.25.3"
 
 
 def print_hello():
