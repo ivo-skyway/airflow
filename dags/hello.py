@@ -1,19 +1,24 @@
 from datetime import datetime
+from time import sleep
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 now = datetime.now()
 cron = '0 * * * *'  # execute every hour at :00
-cron = '*/15 * * * *'  # execute every 5th minute
+cron = '*/5 * * * *'  # execute every 5th minute
 start = now
-version = "0.1.25.1"
+version = "0.1.25.2"
 
 
 def print_hello():
-    msg = f'Hello world v.{version} time now: {datetime.now()}'
-    print(msg)
-    return msg
+    tries = 20
+    for i in range(tries):
+        msg = f'loop {i}/{tries}  Hello world v.{version} time now: {datetime.now()}'
+        print(msg)
+        sleep(30)
+
+    return "OK"
 
 
 dag = DAG('hello_world', description=f'Hello World DAG v.{version}',
