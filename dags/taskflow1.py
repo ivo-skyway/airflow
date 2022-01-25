@@ -27,11 +27,12 @@ def my_etl():
         data_string = '{"1001": 301.27, "1002": 433.21, "1003": 502.22}'
 
         order_data_dict = json.loads(data_string)
-        print(f"Extract: {order_data_dict}")
+        print(f"EXTRACT: {order_data_dict}")
         sleep(1)
         return order_data_dict
 
-    @task(multiple_outputs=True)
+    # @task(multiple_outputs=True) # to return dict
+    @task()
     def transform(order_data_dict: dict):
         """
         #### Transform task
@@ -44,7 +45,7 @@ def my_etl():
             total_order_value += value
 
         sleep(2)
-        print(f"Transform: total_order_value {total_order_value}")
+        print(f"TRANSFORM: total_order_value {total_order_value}")
         return total_order_value
 
     @task()
@@ -54,7 +55,7 @@ def my_etl():
         A simple Load task which takes in the result of the Transform task and
         instead of saving it to end user review, just prints it out.
         """
-        print(f"Load: Total order value is: {total_order_value:.2f}")
+        print(f"LOAD: Total order value is: {total_order_value:.2f}")
         sleep(3)
         return total_order_value
 
