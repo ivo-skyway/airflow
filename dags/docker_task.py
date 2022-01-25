@@ -15,7 +15,7 @@ def tutorial_taskflow_api_etl():
     [here](https://airflow.apache.org/docs/apache-airflow/stable/tutorial_taskflow_api.html)
     """
 
-    @task()
+    @task(multiple_outputs=True)
     def extract():
         """
         #### Extract task
@@ -48,6 +48,7 @@ def tutorial_taskflow_api_etl():
 
         return {"total_order_value": total_order_value}
 
+    @task()
     def load(total_order_value: float):
         """
         #### Load task
@@ -57,9 +58,13 @@ def tutorial_taskflow_api_etl():
 
         print(f"Total order value is: {total_order_value:.2f}")
 
+    print("start")
     order_data = extract()
+    print(f"order_data {order_data}")
     order_summary = transform(order_data)
+    print(f"order_summary {order_summary}")
     load(order_summary["total_order_value"])
+    print("end")
 
 
 tutorial_etl_dag = tutorial_taskflow_api_etl()
