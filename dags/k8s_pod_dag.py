@@ -1,4 +1,5 @@
 import datetime as dt
+import time
 
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
@@ -32,11 +33,12 @@ with DAG('etl_dag',
     )
 
     print(etl.dry_run())
+    time.sleep(10)
 
     print(f'k8s_pod etl v.{version} start,  {dt.datetime.now()}')
 
     etl
 
-    dt.time.sleep(10)
+    time.sleep(10)
 
     print(f'k8s_pod end  {dt.datetime.now()}')
