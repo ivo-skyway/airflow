@@ -5,6 +5,8 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
     KubernetesPodOperator,
 )
 
+version = "0.1.25.7"
+
 # k = KubernetesPodOperator(
 #     name="hello-k8s",
 #     image="python:3.8-slim-buster",
@@ -30,8 +32,8 @@ with DAG('etl_dag',
     extract_transform = KubernetesPodOperator(
         namespace='default',
         image="python:3.8-slim-buster",
-        cmds=["echo"],
-        arguments=["Hello"],
+        cmds=["sleep"],
+        arguments=["100"],
         labels={"foo": "bar"},
         name="extract-transform",
         task_id="extract-transform",
@@ -40,4 +42,8 @@ with DAG('etl_dag',
         in_cluster=True,
     )
 
+    print(f'k8s_pod v.{version} start,  {datetime.now()}')
+
     extract_transform
+
+    print(f'k8s_pod end  {datetime.now()}')
