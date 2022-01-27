@@ -1,14 +1,12 @@
-docker build . --tag ivostoy/my-dbt:1.0.2
-
 https://www.polynique.com/devops/docker-build-multi-platform-images/
 
 docker buildx create --name mybuilder
 docker buildx use mybuilder
 docker buildx inspect --bootstrap
 
-docker buildx build --platform linux/amd64,linux/arm64 . --tag ivostoy/my-dbt:1.0.3 --push
+docker buildx build --platform linux/amd64,linux/arm64 . --tag ivostoy/my-dbt:1.0.5 --push
 
-docker run -it docker.io/ivostoy/my-dbt:1.0.3
+docker run -it docker.io/ivostoy/my-dbt:1.0.
 
 
 

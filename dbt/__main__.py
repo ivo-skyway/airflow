@@ -1,14 +1,13 @@
-import json
 from datetime import datetime
 from time import sleep
 
 now = datetime.now()
 start = now
-version = "0.1.27.3"
+version = "0.1.27.5"
 
 
 def print_hello():
-    tries = 10
+    tries = 5
 
     with open("/tmp/mylog", "wt") as f:
         for i in range(tries):
@@ -18,6 +17,7 @@ def print_hello():
             print(msg)
             sleep(10)
 
+    # this works - but problems on pull side
     xcom_return = {"key1": tries, "key2": "OK"}
     # xcom push
     with open("/airflow/xcom/return.json", "w") as file:

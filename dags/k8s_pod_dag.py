@@ -1,15 +1,13 @@
 import datetime as dt
-import time
 
 from airflow import DAG
-from airflow.operators.bash import BashOperator
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
     KubernetesPodOperator,
 )
 
 ####################
-version = "0.1.27.A"
-image = "docker.io/ivostoy/my-dbt:1.0.4"
+version = "0.1.27.5"
+image = "docker.io/ivostoy/my-dbt:1.0.5"
 ####################
 
 default_args = {
@@ -40,18 +38,21 @@ with DAG('etl_dag',
         do_xcom_push=True
     )
 
-    print(etl.dry_run())
-    time.sleep(2)
+    # print(etl.dry_run())
+    # time.sleep(2)
 
     print(f'k8s_pod etl v.{version} start,  {dt.datetime.now()}')
 
-    print("waiting result...")
+    # todo
+    # print("waiting result...")
+    # pod_task_xcom_result = BashOperator(
+    #     bash_command="echo \"{{ task_instance.xcom_pull('etl')[0] }}\"",
+    #     task_id="pod_task_xcom_result"
+    # )
+    # etl >> pod_task_xcom_result
+    # pod_task_xcom_result(etl)
 
-    pod_task_xcom_result = BashOperator(
-        bash_command="echo \"{{ task_instance.xcom_pull('etl')[0] }}\"",
-        task_id="pod_task_xcom_result"
-    )
     # EXECUTE AS K8S POD
-    etl >> pod_task_xcom_result
+    etl
     #
     print(f'k8s_pod end  {dt.datetime.now()}')
