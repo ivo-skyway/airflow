@@ -6,7 +6,7 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
     KubernetesPodOperator,
 )
 
-version = "0.1.27.3"
+version = "0.1.27.4"
 
 default_args = {
     'owner': 'Ivo',
