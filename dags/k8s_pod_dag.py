@@ -6,8 +6,8 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
 )
 
 ####################
-version = "0.1.27.5"
-image = "docker.io/ivostoy/my-dbt:1.0.5"
+version = "0.1.27.6"
+image = "docker.io/ivostoy/my-dbt:1.0.6"
 ####################
 
 default_args = {
@@ -55,4 +55,4 @@ with DAG('etl_dag',
     # EXECUTE AS K8S POD
     etl
     #
-    print(f'k8s_pod end  {dt.datetime.now()}')
+    print(f'k8s_pod end,  {dt.datetime.now()}')
