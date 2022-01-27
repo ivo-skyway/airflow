@@ -6,16 +6,23 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
     KubernetesPodOperator,
 )
 
-####################
-version = "0.1.27.7"
-image = "docker.io/ivostoy/my-dbt:1.0.6"
-####################
+version = "0.1.28.0"
+image = "docker.io/ivostoy/my-dbt:1.0.7"
+
+
+def now():
+    return dt.datetime.utcnow()
+
+
+def seconds(sec):
+    return dt.timedelta(seconds=sec)
+
 
 default_args = {
     'owner': 'Ivo',
-    'start_date': dt.datetime(2022, 1, 1),
+    'start_date': now(),
     'retries': 1,
-    'retry_delay': dt.timedelta(seconds=300)
+    'retry_delay': seconds(300)
 }
 
 interval = dt.timedelta(seconds=600)
@@ -29,7 +36,7 @@ def wait_result(ti):
     return result
 
 
-print(f'k8s_pod etl v.{version} start,  {dt.datetime.now()}')
+print(f'k8s_pod etl v.{version} start,  {now()}')
 
 with DAG('etl_dag',
          default_args=default_args,
@@ -49,20 +56,12 @@ with DAG('etl_dag',
         do_xcom_push=True
     )
 
-    # print(f"before run")
-    # etl
-    # print(f"after run")
-
-    # result = etl.xcom_pull(key='return_value', task_ids=['etl'])
-    # print(f"result {result}")
-
     get_result = PythonOperator(
         task_id='wait_result',
         python_callable=wait_result
     )
-    # EXECUTE AS K8S POD
+
+    # execute etl task in K8S POD
     etl >> get_result
 
-    # sleep(30)
-    #
-    print(f'k8s_pod end,  {dt.datetime.now()}')
+    print(f'k8s_pod end,  {now()}')

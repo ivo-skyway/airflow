@@ -4,28 +4,25 @@ from time import sleep
 
 now = datetime.now()
 start = now
-version = "0.1.27.6"
+version = "0.1.28.0"
 
 
 def print_hello():
     tries = 5
 
-    with open("/tmp/mylog", "wt") as f:
-        for i in range(tries):
-            msg = f'loop {i + 1}/{tries}  Hello world v.{version} time now: {datetime.now()}'
-            f.write(msg + "\n")
-            f.flush()
-            print(msg)
-            sleep(10)
+    for i in range(tries):
+        msg = f'loop {i + 1}/{tries}  Hello world v.{version} time now: {datetime.now()}'
+        print(msg)
+        sleep(10)
 
-    # this works - but problems on pull side
-    xcom_return = {"key1": tries, "key2": "OK"}
-    # xcom push
+    return {"number": tries, "status": "OK"}
+
+
+def xcom_push(msg):
     with open("/airflow/xcom/return.json", "w") as file:
-        json.dump(xcom_return, file)
-
-    return "OK"
+        json.dump(msg, file)
 
 
 if __name__ == "__main__":
-    print_hello()
+    ret = print_hello()
+    xcom_push(ret)
