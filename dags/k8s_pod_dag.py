@@ -8,8 +8,8 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
 )
 
 ####################
-version = "0.1.27.5"
-image = "docker.io/ivostoy/my-dbt:1.0.A"
+version = "0.1.27.A"
+image = "docker.io/ivostoy/my-dbt:1.0.4"
 ####################
 
 default_args = {
