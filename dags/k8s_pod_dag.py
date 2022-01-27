@@ -1,12 +1,13 @@
 import datetime as dt
 
 from airflow import DAG
+from airflow.operators.python import PythonOperator
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
     KubernetesPodOperator,
 )
 
 ####################
-version = "0.1.27.6"
+version = "0.1.27.7"
 image = "docker.io/ivostoy/my-dbt:1.0.6"
 ####################
 
@@ -19,6 +20,16 @@ default_args = {
 
 interval = dt.timedelta(seconds=600)
 interval = None
+
+
+def wait_result(ti):
+    print("waiting result...")
+    result = ti.xcom_pull(key='return_value', task_ids=['etl'])
+    print(f"result {result}")
+    return result
+
+
+print(f'k8s_pod etl v.{version} start,  {dt.datetime.now()}')
 
 with DAG('etl_dag',
          default_args=default_args,
@@ -38,21 +49,20 @@ with DAG('etl_dag',
         do_xcom_push=True
     )
 
-    # print(etl.dry_run())
-    # time.sleep(2)
+    # print(f"before run")
+    # etl
+    # print(f"after run")
 
-    print(f'k8s_pod etl v.{version} start,  {dt.datetime.now()}')
+    # result = etl.xcom_pull(key='return_value', task_ids=['etl'])
+    # print(f"result {result}")
 
-    # todo
-    # print("waiting result...")
-    # pod_task_xcom_result = BashOperator(
-    #     bash_command="echo \"{{ task_instance.xcom_pull('etl')[0] }}\"",
-    #     task_id="pod_task_xcom_result"
-    # )
-    # etl >> pod_task_xcom_result
-    # pod_task_xcom_result(etl)
-
+    get_result = PythonOperator(
+        task_id='wait_result',
+        python_callable=wait_result
+    )
     # EXECUTE AS K8S POD
-    etl
+    etl >> get_result
+
+    # sleep(30)
     #
     print(f'k8s_pod end,  {dt.datetime.now()}')
