@@ -11,8 +11,8 @@ version = "0.1.26.0"
 default_args = {
     'owner': 'Ivo',
     'start_date': dt.datetime(2022, 1, 1),
-    'retries': 3,
-    'retry_delay': dt.timedelta(seconds=30)
+    'retries': 1,
+    'retry_delay': dt.timedelta(seconds=300)
 }
 
 with DAG('etl_dag',
