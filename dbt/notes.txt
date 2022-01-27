@@ -1,0 +1,5 @@
+docker build . --tag ivostoy/my-dbt:1.0.1
+
+docker push ivostoy/my-dbt:1.0.1
+
+docker run docker.io/ivostoy/my-dbt:1.0.1

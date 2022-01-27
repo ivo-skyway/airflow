@@ -15,13 +15,15 @@ default_args = {
     'retry_delay': dt.timedelta(seconds=300)
 }
 
+interval = dt.timedelta(seconds=600)
+interval = None
 with DAG('etl_dag',
          default_args=default_args,
          catchup=False,
-         schedule_interval=dt.timedelta(seconds=600)) as dag:
+         schedule_interval=interval) as dag:
     etl = KubernetesPodOperator(
-        namespace='default',
-        image="docker.io/ivostoy/my-dbt:1.0.0",
+        namespace='airflow',
+        image="docker.io/ivostoy/my-dbt:1.0.1",
         cmds=[],
         arguments=[],
         labels={"foo": "bar"},
