@@ -6,7 +6,7 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
     KubernetesPodOperator,
 )
 
-version = "0.1.27.4"
+version = "0.1.27.0"
 
 default_args = {
     'owner': 'Ivo',
@@ -23,7 +23,7 @@ with DAG('etl_dag',
          catchup=False,
          schedule_interval=interval) as dag:
     etl = KubernetesPodOperator(
-        namespace='default',
+        namespace='airflow',
         image="docker.io/ivostoy/my-dbt:1.0.3",
         cmds=[],
         arguments=[],
