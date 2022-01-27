@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from time import sleep
 
@@ -16,6 +17,11 @@ def print_hello():
             f.flush()
             print(msg)
             sleep(10)
+
+    xcom_return = {"key1": tries, "key2": "OK"}
+    # xcom push
+    with open("/airflow/xcom/return.json", "w") as file:
+        json.dump(xcom_return, file)
 
     return "OK"
 
