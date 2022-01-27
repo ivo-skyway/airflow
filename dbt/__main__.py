@@ -3,7 +3,7 @@ from time import sleep
 
 now = datetime.now()
 start = now
-version = "0.1.25.3"
+version = "0.1.27.3"
 
 
 def print_hello():

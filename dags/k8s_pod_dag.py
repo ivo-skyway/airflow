@@ -17,13 +17,14 @@ default_args = {
 
 interval = dt.timedelta(seconds=600)
 interval = None
+
 with DAG('etl_dag',
          default_args=default_args,
          catchup=False,
          schedule_interval=interval) as dag:
     etl = KubernetesPodOperator(
-        namespace='airflow',
-        image="docker.io/ivostoy/my-dbt:1.0.2",
+        namespace='default',
+        image="docker.io/ivostoy/my-dbt:1.0.3",
         cmds=[],
         arguments=[],
         labels={"foo": "bar"},
