@@ -8,8 +8,8 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
 )
 
 ####################
-version = "0.1.27.4"
-image = "docker.io/ivostoy/my-dbt:1.0.4"
+version = "0.1.27.5"
+image = "docker.io/ivostoy/my-dbt:1.0.A"
 ####################
 
 default_args = {
@@ -41,21 +41,17 @@ with DAG('etl_dag',
     )
 
     print(etl.dry_run())
-    time.sleep(10)
+    time.sleep(2)
 
     print(f'k8s_pod etl v.{version} start,  {dt.datetime.now()}')
 
-    ### EXECUTE AS K8S POD
-    etl
-    ###
+    print("waiting result...")
 
     pod_task_xcom_result = BashOperator(
         bash_command="echo \"{{ task_instance.xcom_pull('etl')[0] }}\"",
-        task_id="pod_task_xcom_result",
+        task_id="pod_task_xcom_result"
     )
-
-    print("RESULT", pod_task_xcom_result)
-
-    time.sleep(10)
-
+    # EXECUTE AS K8S POD
+    etl >> pod_task_xcom_result
+    #
     print(f'k8s_pod end  {dt.datetime.now()}')
