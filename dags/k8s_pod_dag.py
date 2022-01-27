@@ -20,7 +20,7 @@ with DAG('etl_dag',
          catchup=False,
          schedule_interval=dt.timedelta(seconds=600)) as dag:
     etl = KubernetesPodOperator(
-        namespace='airflow',
+        namespace='default',
         image="docker.io/ivostoy/my-dbt:1.0.0",
         cmds=[],
         arguments=[],
